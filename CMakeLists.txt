@@ -3,4 +3,4 @@ project(Yukon1 C)
 
 set(CMAKE_C_STANDARD 99)
 
-add_executable(Yukon1 main.c)
+add_executable(Yukon1 src/main.c)
