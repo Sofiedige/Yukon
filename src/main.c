@@ -1,26 +1,43 @@
-
-typedef struct String String;
 #include <stdio.h>
+#include <string.h>
+typedef struct String String;
 
-void main() {
-    printf("C1  C2  C3  C4  C5  C6  C7\n");
-    printf("                                        F1\n");
-    printf("                                        F2\n");
-    printf("                                        F3\n");
-    printf("                                        F4\n");
+typedef struct card{
+    char suit;
+    int rank;
+    struct card* next;
+    struct card* prev;
+};
+
+
+void LD(char file[]){
+    char tempDeck[104];
+    FILE *in = fopen(file,"r");
+    if(!in){
+        printf("fejl\n");
+    }
+    int wordCount;
+    fscanf(in,"%d ",&wordCount);
+
+    for (int i = 0; i < wordCount; ++i) {
+        fscanf(in,"%c\n",&tempDeck[i]);
+        printf("%c\n",tempDeck[i]);
+    }
+
+
+    for (int i = 0; i < wordCount/2; ++i) {
+
+
+    }
 
 }
 
+int Sl(){
+}
 
 
-int Card(){
-        String *deck[52];
-        char *type_str[] = {"SCHD"};
-        char *num_str[] = {"A23456789TJQK"};
-
-    for (int i = 0; i < 52; ++i) {
-
-    }
+int main(){
+    LD("Deck");
 
 
 }
