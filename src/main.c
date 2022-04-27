@@ -33,6 +33,8 @@ struct node *addCard(char suit, char rank){
 }
 
 void print(node *head) {
+
+
     struct node *arr[7];
     int j=1;
     node *currentNode = head->next;
@@ -113,6 +115,9 @@ void print(node *head) {
             j++;
         }
     }
+
+    printf("%s%s\n",arr);
+
     }
 
 
@@ -128,11 +133,7 @@ void createTempDeck(char file[]){
     for (int i = 0; i < wordCount; ++i) {
         fscanf(in,"%c\n",&tempDeck[i]);
     }
-}
 
-
-void SW(char file[]) {
-    createTempDeck(file);
     for (int i = 0; i < 104; ++i) {
         if (head == NULL) {
             addFirst(tempDeck[i], tempDeck[i + 1]);
@@ -142,15 +143,12 @@ void SW(char file[]) {
         }
         i++;
     }
-    struct node *arr[7];
-    int j=1;
-    for (int i = 0; i < 52; ++i) {
+}
 
-    }
 
-    printf("%s\n",addFirst(tempDeck[0],tempDeck[1]));
-    printf("%c%c\n",tempDeck[0],tempDeck[1]);
-    printf("%s\n", addCard(tempDeck[2],tempDeck[3]));
+void SW(char file[]) {
+    createTempDeck(file);
+    printf("%s", head);
 
 }
 
