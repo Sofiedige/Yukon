@@ -12,10 +12,10 @@ typedef struct node{
 struct node* head = NULL;
 struct node* prevNode=NULL;
 
-struct node *addFirst(char rank, char suit){
+struct node *addFirst(char suit, char rank){
     node *newNode = malloc(sizeof (node));
-    newNode->rank=rank;
     newNode->suit=suit;
+    newNode->rank=rank;
     newNode->next=NULL;
     newNode->prev=NULL;
     head = newNode;
@@ -23,7 +23,7 @@ struct node *addFirst(char rank, char suit){
     return newNode;
 }
 
-struct node *addCard(char rank, char suit){
+struct node *addCard(char suit, char rank){
     node *newNode = malloc(sizeof (node));
     newNode->rank=rank;
     newNode->suit=suit;
@@ -142,8 +142,15 @@ void SW(char file[]) {
         }
         i++;
     }
+    struct node *arr[7];
+    int j=1;
+    for (int i = 0; i < 52; ++i) {
+
+    }
+
     printf("%s\n",addFirst(tempDeck[0],tempDeck[1]));
-    printf("%c%c",tempDeck[0],tempDeck[1]);
+    printf("%c%c\n",tempDeck[0],tempDeck[1]);
+    printf("%s\n", addCard(tempDeck[2],tempDeck[3]));
 
 }
 
@@ -177,8 +184,7 @@ int Sl(){
 
 
 int main(){
-    printf("%s\n",addFirst(tempDeck[0],tempDeck[1]));
-    printf("%c%c",tempDeck[0],tempDeck[1]);
+    SW("Deck");
 }
 
 
