@@ -7,6 +7,7 @@ typedef struct node{
     char rank;
     struct node* next;
     struct node* prev;
+    int isVisible;
 }node;
 
 struct node* head = NULL;
@@ -64,6 +65,13 @@ void createTempDeck(char file[]){
         j++;
     }
 }
+void makeNotVisible (){
+    node *current = head;
+    while (current != NULL){
+        current -> isVisible = 0;
+        current = current->next;
+    }
+}
 
 void print(node *head) {
     int count = 0;
@@ -99,8 +107,12 @@ void SW(char file[]) {
 }
 
     void LD(char file[]){
-        node *current=head->next;
+        //node *current=head->next;
         createTempDeck(file);
+        node *current = head;
+
+        //skal
+
         for (int i = 0; i < 104; ++i) {
             if (head==NULL) {
                 addFirst("[", "]");
