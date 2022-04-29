@@ -25,6 +25,7 @@ struct node *addFirst(char suit, char rank){
 
 struct node *addCard(char suit, char rank){
     node *newNode = malloc(sizeof (node));
+    prevNode->next=newNode;
     newNode->rank=rank;
     newNode->suit=suit;
     newNode->next=NULL;
@@ -33,7 +34,6 @@ struct node *addCard(char suit, char rank){
 }
 
 void print(node *head) {
-
 
     struct node *arr[7];
     int j=1;
@@ -147,9 +147,20 @@ void createTempDeck(char file[]){
 
 
 void SW(char file[]) {
-    createTempDeck(file);
-    printf("%s", head);
-
+    int count = 0;
+    node *current_node = head;
+    while ( current_node != NULL) {
+        count++;
+        if(count > 7) {
+            printf("\n%c%c ", current_node->suit, current_node->rank);
+            current_node = current_node->next;
+            count=1;
+        }
+        else{
+            printf("%c%c ", current_node->suit, current_node->rank);
+            current_node = current_node->next;
+        }
+    }
 }
 
 
@@ -166,10 +177,11 @@ void SW(char file[]) {
             }
             i++;
         }
+        current=head;
         for (int i = 0; i < 52; ++i) {
-            current=head->next;
+
                 printf("%d%d\n",current->rank,current->suit);
-                current=current->next;
+                current = current->next;
         }
 
 
