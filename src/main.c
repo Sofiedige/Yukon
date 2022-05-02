@@ -12,6 +12,7 @@ typedef struct node{
 
 struct node* head = NULL;
 struct node* prevNode = NULL;
+char tempDeck[104];
 
 struct node *addFirst(char suit, char rank){
     node *newNode = malloc(sizeof (node));
@@ -41,8 +42,6 @@ struct node *addCard(char suit, char rank){
     return newNode;
 }
 
-char tempDeck[104];
-
 void createTempDeck(char file[]){
     FILE *in = fopen(file,"r");
     if(!in){
@@ -65,15 +64,40 @@ void createTempDeck(char file[]){
         j++;
     }
 }
-void makeNotVisible (){
+
+void LDtest(){
+    createTempDeck("Deck");
+    char brackets [2] = "[]";
+    int count = 0;
+    for (int i = 0; i > 52; i++) {
+        count++;
+        if (count > 7) {
+            printf("\n%s ",brackets);
+            count = 1;
+        }
+        else {
+            printf("%s ", brackets);
+        }
+    }
+}
+void makeAllNotVisible (){
     node *current = head;
     while (current != NULL){
         current -> isVisible = 0;
         current = current->next;
     }
 }
+void makeVisible (node *node){
+    node->isVisible = 1;
+}
 
-void print(node *head) {
+void print() {
+    node *current = head;
+
+}
+
+
+void SW() {
     int count = 0;
     node *current_node = head;
     while ( current_node != NULL) {
@@ -90,28 +114,12 @@ void print(node *head) {
     }
 }
 
-
-void SW(char file[]) {
-    createTempDeck(file);
-
-    struct node *arr[7];
-    int j=1;
-    for (int i = 0; i < 52; ++i) {
-
-    }
-
-    printf("%s\n",addFirst(tempDeck[0],tempDeck[1]));
-    printf("%c%c\n",tempDeck[0],tempDeck[1]);
-    printf("%s\n", addCard(tempDeck[2],tempDeck[3]));
-
-}
-
     void LD(char file[]){
         //node *current=head->next;
         createTempDeck(file);
-        node *current = head;
+        makeAllNotVisible();
+        //skal lave alle not visible.
 
-        //skal
 
         for (int i = 0; i < 104; ++i) {
             if (head==NULL) {
@@ -122,11 +130,6 @@ void SW(char file[]) {
             }
             i++;
         }
-        for (int i = 0; i < 52; ++i) {
-            current=head->next;
-                printf("%d%d\n",current->rank,current->suit);
-                current=current->next;
-        }
 }
 
 int Sl(){
@@ -134,8 +137,10 @@ int Sl(){
 
 
 int main(){
-    createTempDeck("Deck");
-    print(head);
+    LDtest();
+    //SW();
+    //createTempDeck("Deck");
+    //print();
     //SW("Deck");
 }
 
