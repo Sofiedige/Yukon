@@ -82,24 +82,7 @@ void LDtest() {
         }
     }
 }
-/*
-    createTempDeck("Deck");
-    char brackets [2] = "[]";
-    int count = 0;
-    for (int i = 0; i > 52; i++) {
-        count++;
-        if (count > 7) {
-            printf("[]");
-            //printf("\n%s ",brackets);
-            count = 1;
-        }
-        else {
-            printf("[]");
-            //printf("%s ", brackets);
-        }
-    }
-}
- */
+
 void makeAllNotVisible (){
     node *current = head;
     while (current != NULL){
@@ -111,8 +94,31 @@ void makeVisible (node *node){
     node->isVisible = 1;
 }
 
-void print() {
-    node *current = head;
+void cardStartVisibility(node arr[]){
+    arr[0].isVisible = 1;
+    int count;
+
+    //runs through all collums.
+    for (int i = 1; i < 7; i++){
+        //restarts counter.
+        count = 0;
+
+        //sets current node to the head of current column.
+        node *current = &arr[i];
+
+        //runs through all nodes in column list.
+        while(current != NULL){
+            current->isVisible = 0;
+            count++;
+            if (count > i){
+                current->isVisible = 1;
+            }
+            current = current->next;
+        }
+    }
+}
+
+void print(){
 
 }
 
