@@ -94,6 +94,10 @@ void makeVisible (node *node){
     node->isVisible = 1;
 }
 
+void columns(){
+
+}
+
 void cardStartVisibility(node arr[]){
     arr[0].isVisible = 1;
     int count;
