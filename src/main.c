@@ -167,27 +167,21 @@ void SW() {
 
 
     void LD(char file[]){
-        node *current=head->next;
         createTempDeck(file);
-        for (int i = 0; i < 104; ++i) {
-            if (head==NULL) {
-                addFirst("[", "]");
+
+        int count = 0;
+        node *current_node = head;
+        while (current_node != NULL) {
+            count++;
+            if (count > 7) {
+                printf("\n[]");
+                current_node = current_node->next;
+                count = 1;
+            } else {
+                printf("[]");
+                current_node = current_node->next;
             }
-            if (head!=NULL) {
-                addCard("[", "]");
-            }
-            i++;
         }
-        current=head;
-        for (int i = 0; i < 52; ++i) {
-
-                printf("%d%d\n",current->rank,current->suit);
-                current = current->next;
-        }
-
-
-
-
 }
 
 int Sl(){
@@ -195,8 +189,8 @@ int Sl(){
 
 
 int main(){
-    createTempDeck("Deck");
-    SW();
+    LD("Deck");
+    //SW();
 }
 
 
