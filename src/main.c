@@ -164,8 +164,6 @@ void SW() {
     }
 }
 
-
-
     void LD(char file[]){
         createTempDeck(file);
 
@@ -186,7 +184,6 @@ void SW() {
 
 int Sl(){
 }
-
 
 int main(){
     LD("Deck");
