@@ -65,21 +65,41 @@ void createTempDeck(char file[]){
     }
 }
 
-void LDtest(){
+void LDtest() {
+    createTempDeck("Deck");
+
+    int count = 0;
+    node *current_node = head;
+    while (current_node != NULL) {
+        count++;
+        if (count > 7) {
+            printf("\n[]");
+            current_node = current_node->next;
+            count = 1;
+        } else {
+            printf("[]");
+            current_node = current_node->next;
+        }
+    }
+}
+/*
     createTempDeck("Deck");
     char brackets [2] = "[]";
     int count = 0;
     for (int i = 0; i > 52; i++) {
         count++;
         if (count > 7) {
-            printf("\n%s ",brackets);
+            printf("[]");
+            //printf("\n%s ",brackets);
             count = 1;
         }
         else {
-            printf("%s ", brackets);
+            printf("[]");
+            //printf("%s ", brackets);
         }
     }
 }
+ */
 void makeAllNotVisible (){
     node *current = head;
     while (current != NULL){
@@ -133,11 +153,15 @@ void SW() {
 }
 
 int Sl(){
+    printf("[]");
 }
 
 
 int main(){
+    //Sl();
     LDtest();
+    //SW();
+
     //SW();
     //createTempDeck("Deck");
     //print();
