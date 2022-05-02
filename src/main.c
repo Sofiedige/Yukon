@@ -30,6 +30,7 @@ struct node *addCard(char suit, char rank){
     newNode->suit=suit;
     newNode->next=NULL;
     newNode->prev=prevNode;
+    prevNode = newNode;
     return newNode;
 }
 
@@ -146,7 +147,7 @@ void createTempDeck(char file[]){
 }
 
 
-void SW(char file[]) {
+void SW() {
     int count = 0;
     node *current_node = head;
     while ( current_node != NULL) {
@@ -194,7 +195,8 @@ int Sl(){
 
 
 int main(){
-    SW("Deck");
+    createTempDeck("Deck");
+    SW();
 }
 
 
