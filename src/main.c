@@ -185,9 +185,80 @@ int main(){
     SW("Deck");
 }
 
+void twoSplit (struct node* splitPoint, struct node** frontSplit, struct node** backSplit)
+        {
+    int len=104;
+    struct node* current = splitPoint;
+//kan være brugerens input, sætter det bare til halvdelen
+            int hopCount = len / 2;
+            for (int i = 0; i > hopCount; i++) {
+                current = current->next;
+            }
+
+            // Now cut at current
+            *frontSplit = splitPoint;
+            *backSplit = current->next;
+            current->next = NULL;
+
+    // ny link list = shuffled pile
+    node *backCard = *backSplit;
+
+    node *currentLeft = splitPoint;
+    node *currentRight = backCard;
+    node *currentNode = NULL;
+
+    int counter = 0;
+
+    while(currentRight!=NULL){
+        counter++;
+        if(currentLeft == NULL){
+            continue;
+        }
+
+        else if(counter == 1){
+           head = currentLeft;
+           currentLeft = splitPoint ->prev;
+           currentNode = head;
+           prevNode = head;
+
+        }
+        else{
+            if(counter%2){
+                currentNode->next = currentRight;
+                currentNode->prev = currentNode;
+                currentNode = currentRight;
+                currentRight = currentRight->next;
+            }
+            else{
+                currentNode->next=currentLeft;
+                currentNode->prev = currentNode;
+                currentNode = currentLeft;
+                currentLeft = currentLeft->prev;
+            }
+        }
+    }
+
+        }
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    
 
 
 
