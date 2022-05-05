@@ -1,6 +1,8 @@
 #include <stdio.h>
 #include <memory.h>
+#include <stdlib.h>
 
+void QQ();
 void *malloc(size_t size);
 
 
@@ -243,5 +245,15 @@ int main(){
     //printf("\n\n");
     //SWtest();
     //printf("\n%c%c ", arr[0].suit, arr[0].rank);
+
+}
+
+//command to quit program.
+void QQ(){
+    exit(0);
+}
+
+//command to quit and starup game. Restart game.
+void Q(){
 
 }
