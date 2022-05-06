@@ -108,8 +108,48 @@ void dealCards() {
         }
     }
 }
+int isValid(node* dest, node* move){
+    int isSuitValid = 0, isRankValid = 0;
+
+    //check for rank
+
+
+    //check for suit
+    if(dest->suit == move->suit){
+        return 0;
+    }
+    else
+
+}
 
 void moveCard(){
+    char input[9];
+    scanf("%s",input);
+    printf("%s", input);
+    node* moveCard;
+    node* destCard;
+
+    if(input[0]=='C'){
+        node* current = &arr[input[1]];
+        while (current->nextInC != NULL){
+            if (current->nextInC->rank == input[3] && current->nextInC->suit == input[4]){
+                moveCard = current->nextInC;
+                destCard = &arr[input[8]];
+                if(destCard == NULL){  //hvis kollonen er tom
+
+                }
+                else{
+                while (destCard->nextInC != NULL){
+                    destCard = destCard->nextInC;
+                }
+                if(destCard->suit ==
+                }
+            }
+            current = current->nextInC;
+        }
+    }
+    //tag også stilling til om en kolonne bliver tom så head = NULL
+    //og hvis der tilføjes noget i en tom kolonne bliver det lig head.
 
 }
 
@@ -195,17 +235,22 @@ void SW() {
     printf(" C1  C2  C3  C4  C5  C6  C7\n\n");
 
     int count = 0;
-    int foundation = 0, foundationNo = 1;
+    int foundation = 0;
 
     node *current_node = head;
     while ( current_node != NULL) {
         count++;
         if(count > 7) {
-            foundation++;
-            if(foundation == foundationNo){
-                printf("\t F%d",foundationNo);
-                foundationNo = foundationNo + 2;
+            if(foundation == 0){
+                printf("\t[] F1");            }
+            if(foundation == 2){
+                printf("\t[] F2");            }
+            if(foundation == 4){
+                printf("\t[] F3");            }
+            if(foundation == 6){
+                printf("\t[] F4");
             }
+            foundation++;
             printf("\n %c%c ", current_node->suit, current_node->rank);
             current_node = current_node->next;
             count=1;
@@ -223,17 +268,22 @@ void LD(){
     createTempDeck("Deck");
     printf(" C1  C2  C3  C4  C5  C6  C7\n\n");
 
-    int foundation = 0, foundationNo = 1;
+    int foundation = 0;
     int count = 0;
     node *current_node = head;
     while (current_node != NULL) {
         count++;
         if (count > 7) {
-            foundation++;
-            if(foundation == foundationNo){
-                printf("\t F%d",foundationNo);
-                foundationNo = foundationNo + 2;
+            if(foundation == 0){
+                printf("\t[] F1");            }
+            if(foundation == 2){
+                printf("\t[] F2");            }
+            if(foundation == 4){
+                printf("\t[] F3");            }
+            if(foundation == 6){
+                printf("\t[] F4");
             }
+            foundation++;
             printf("\n [] ");
             current_node = current_node->next;
 
@@ -324,10 +374,6 @@ void twoSplit () {
 }
 int main(){
 
-
-
-
-
     char input[10];
     while(1){
         scanf("%s",input);
@@ -347,7 +393,7 @@ int main(){
         }
     }
 
-
+    moveCard();
     LD();
     SW();
     twoSplit();
@@ -370,7 +416,6 @@ int main(){
     //printf("\n\n");
     //SWtest();
     //printf("\n%c%c ", arr[0].suit, arr[0].rank);
-
 }
 
 //command to quit program.
