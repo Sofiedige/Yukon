@@ -120,7 +120,7 @@ void inputPrint(){
     printf("\n");
 }
 
-void print(){
+char print(){
     char printArr[23][100];
     memset(printArr, 0, 23*100);
     node *current = &arr[0];
@@ -247,6 +247,35 @@ void LD(){
     printf("\n");
     inputPrint();
 }
+/*
+void SaveDeck(node arr[7]){
+FILE *pFile;
+pFile = fopen("SavedGameDeck","wb");
+
+if(pFile!=NULL){
+    for (int i = 0; i < 7; ++i) {
+        node *savedCurrent = &arr[i];
+        node *savedNext = NULL;
+
+        while (savedCurrent != NULL) {
+            savedNext = savedCurrent->nextInC;
+
+            savedCurrent->nextInC = NULL;
+
+            fseek(pFile, 0, SEEK_END);
+            fwrite(savedCurrent, sizeof (node), 1, "SavedGameDeck");
+
+            savedCurrent ->nextInC = savedNext;
+            savedNext=NULL;
+            savedCurrent=savedCurrent->nextInC;
+        }
+    }
+
+}else{
+    printf("FILE ERROR");
+}
+}
+*/
 
 int Sl(){
 }
@@ -262,7 +291,7 @@ int main(){
     //print();
     printf("\n");
     print();
-
+    SaveDeck(arr);
 
     /*node *current;
     current = &arr[5];
