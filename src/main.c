@@ -117,7 +117,6 @@ void inputPrint(){
     printf("LAST COMMAND: %s\n", "Last command");
     printf("MESSAGE: %s\n", "Message");
     printf("INPUT >");
-    printf("\n");
 }
 
 char print(){
@@ -247,35 +246,13 @@ void LD(){
     printf("\n");
     inputPrint();
 }
-/*
-void SaveDeck(node arr[7]){
-FILE *pFile;
-pFile = fopen("SavedGameDeck","wb");
 
-if(pFile!=NULL){
-    for (int i = 0; i < 7; ++i) {
-        node *savedCurrent = &arr[i];
-        node *savedNext = NULL;
+void StartScreen(){
+    printf(" C1  C2  C3  C4  C5  C6  C7\n\n");
 
-        while (savedCurrent != NULL) {
-            savedNext = savedCurrent->nextInC;
-
-            savedCurrent->nextInC = NULL;
-
-            fseek(pFile, 0, SEEK_END);
-            fwrite(savedCurrent, sizeof (node), 1, "SavedGameDeck");
-
-            savedCurrent ->nextInC = savedNext;
-            savedNext=NULL;
-            savedCurrent=savedCurrent->nextInC;
-        }
-    }
-
-}else{
-    printf("FILE ERROR");
 }
-}
-*/
+
+
 
 void ResetGame(){
     print();
@@ -283,8 +260,32 @@ void ResetGame(){
 
 int Sl(){
 }
+int strcmp (const char* str1, const char* str2);
 
 int main(){
+
+
+
+
+
+    char input[10];
+    while(1){
+        scanf("%s",input);
+        if(strcmp(input,"QQ")==0){
+            QQ();
+        }if(strcmp(input,"Q")==0){
+            ResetGame();
+        }if(strcmp(input,"P")==0){
+            dealCards();
+            print();
+        }if(strcmp(input,"LD")==0){
+            LD();
+        }if(strcmp(input,"SW")==0){
+            SW();
+        }
+    }
+
+
     LD();
     SW();
 
@@ -316,6 +317,3 @@ void QQ(){
 }
 
 //command to quit and starup game. Restart game.
-void Q(){
-
-}
