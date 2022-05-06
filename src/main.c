@@ -108,6 +108,8 @@ void dealCards() {
         }
     }
 }
+
+/*
 int isValid(node* dest, node* move){
     int isSuitValid = 0, isRankValid = 0;
 
@@ -120,7 +122,9 @@ int isValid(node* dest, node* move){
     }
     else
 
-}
+} */
+
+/*
 
 void moveCard(){
     char input[9];
@@ -142,7 +146,7 @@ void moveCard(){
                 while (destCard->nextInC != NULL){
                     destCard = destCard->nextInC;
                 }
-                if(destCard->suit ==
+                if(destCard->suit == 0)
                 }
             }
             current = current->nextInC;
@@ -152,7 +156,7 @@ void moveCard(){
     //og hvis der tilføjes noget i en tom kolonne bliver det lig head.
 
 }
-
+*/
 void inputPrint(){
     printf("LAST COMMAND: %s\n", "Last command");
     printf("MESSAGE: %s\n", "Message");
@@ -393,7 +397,7 @@ int main(){
         }
     }
 
-    moveCard();
+    //moveCard();
     LD();
     SW();
     twoSplit();
