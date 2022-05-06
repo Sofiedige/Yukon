@@ -277,11 +277,14 @@ if(pFile!=NULL){
 }
 */
 
+void ResetGame(){
+    print();
+}
+
 int Sl(){
 }
 
 int main(){
-
     LD();
     SW();
 
@@ -291,7 +294,7 @@ int main(){
     //print();
     printf("\n");
     print();
-    SaveDeck(arr);
+    ResetGame();
 
     /*node *current;
     current = &arr[5];
