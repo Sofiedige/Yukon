@@ -261,7 +261,67 @@ void ResetGame(){
 int Sl(){
 }
 int strcmp (const char* str1, const char* str2);
+void twoSplit () {
+    int len = 52;
+    node *current = head;
+//kan være brugerens input, sætter det bare til halvdelen
+    int hopCount = (len / 2)-1;
+    for (int i = 0; i < hopCount; i++) {
+        current = current->next;
+    }
 
+    // Now cut at current
+    node *frontSplit = current;
+    node *backSplit = current->next;
+    frontSplit->next = NULL;
+    backSplit->prev = NULL;
+
+    int counter = 0;
+    head = NULL;
+    node* temp = NULL;
+
+    while (frontSplit != NULL || backSplit != NULL) {
+        counter++;
+
+        if (head == NULL) {
+            head = frontSplit;
+            temp = frontSplit;
+
+            //current = shuffleHead;
+            //prevNode = frontSplit;
+            frontSplit = frontSplit->prev;
+            temp->prev = NULL;
+        } else {
+            if (counter % 2 == 1) {
+                //current = backSplit;
+                temp->next=frontSplit;
+                if (frontSplit->prev != NULL) {
+                    frontSplit = frontSplit->prev;
+                    frontSplit->next = NULL;
+                } else
+                    frontSplit = NULL;
+                temp->next->prev = temp;
+                temp=temp->next;
+                temp->next=NULL;
+
+            } else {
+                //current = frontSplit;
+                temp->next=backSplit;
+                if (backSplit->next != NULL) {
+                    backSplit = backSplit->next;
+                    backSplit->prev = NULL;
+                }else
+                    backSplit = NULL;
+                temp->next->prev = temp;
+                temp=temp->next;
+                temp->next=NULL;
+
+            }
+        }
+        //current = current->next;
+    }
+
+}
 int main(){
 
 
@@ -282,13 +342,15 @@ int main(){
             LD();
         }if(strcmp(input,"SW")==0){
             SW();
+        }if(strcmp(input,"SI")==0){
+            twoSplit();
         }
     }
 
 
     LD();
     SW();
-
+    twoSplit();
     //createTempDeck("Deck");
     dealCards();
     //cardStartVisibility();
