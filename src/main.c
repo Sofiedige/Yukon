@@ -317,7 +317,7 @@ char print(){
             count++;
         }
     }
-    printf(" C1  C2  C3  C4  C5  C6  C7\n\n");
+    printf("\n C1  C2  C3  C4  C5  C6  C7\n\n");
     for(int i = 0; i < 22; i++){
         if(i > longest)
             continue;
@@ -391,9 +391,7 @@ void SW() {
     printf("\n");
     inputPrint();
 }
-
-void LD(){
-    createTempDeck("Deck");
+void bracketPrint(){
     printf(" C1  C2  C3  C4  C5  C6  C7\n\n");
 
     int foundation = 0;
@@ -423,6 +421,11 @@ void LD(){
     }
     printf("\n");
     inputPrint();
+}
+
+void LD(){
+    createTempDeck("Deck");
+    bracketPrint();
 }
 
 void StartScreen(){
@@ -523,6 +526,7 @@ int main(){
             SW();
         }if(strcmp(input,"SI")==0){
             twoSplit();
+            bracketPrint();
         }if(input[7]=='C' || input[7]=='F'){
             moveCard(input);
             print();
@@ -537,32 +541,6 @@ int main(){
             lastCommand[i] = ' ';
         }
     }
-
-    LD();
-    SW();
-    twoSplit();
-    //createTempDeck("Deck");
-    dealCards();
-    //cardStartVisibility();
-    //print();
-    printf("\n");
-    print();
-    //moveCard();
-    print();
-
-    //ResetGame();
-
-    /*node *current;
-    current = &arr[5];
-    while (current !=NULL){
-        printf("%c%c",current->suit,current->rank);
-        //printf("%d ",current->nextInC);
-        current = current->nextInC;
-    }*/
-
-    //printf("\n\n");
-    //SWtest();
-    //printf("\n%c%c ", arr[0].suit, arr[0].rank);
 }
 
 //command to quit program.
