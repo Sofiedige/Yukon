@@ -155,7 +155,6 @@ void moveCard(char input[]) {
     int column, destColumn;
     char *col = &input[1];
     char *destCol = &input[8];
-    //C4:5C->C3
 
     column = strtol(col, NULL, 10);
     node* current = arr[column - 1];
@@ -203,10 +202,8 @@ void moveCard(char input[]) {
                 moveCard->prev = destCard;
                 destCard->nextInC = moveCard;
             }
-
-                //}
-                //else { //print dette kort ikke kan rykkes
         }
+        //else { //print dette kort ikke kan rykkes }
     }
 }
 
