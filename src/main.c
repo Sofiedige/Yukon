@@ -1,7 +1,6 @@
 #include <stdio.h>
 #include <memory.h>
 #include <stdlib.h>
-#include <ctype.h>
 
 void QQ();
 void *malloc(size_t size);
@@ -16,14 +15,12 @@ typedef struct node{
     int isVisible;
 }node;
 
-node* arr[7];
+node arr[7];
 struct node* head = NULL;
 struct node* prevNode = NULL;
 char tempDeck[104];
-char message[15];
-char lastCommand[10];
 
-struct node *addFirst(char rank, char suit){
+struct node *addFirst(char suit, char rank){
     node *newNode = malloc(sizeof (node));
     newNode->suit=suit;
     newNode->rank=rank;
@@ -35,7 +32,7 @@ struct node *addFirst(char rank, char suit){
     return newNode;
 }
 
-struct node *addCard(char rank, char suit){
+struct node *addCard(char suit, char rank){
     node *newNode = malloc(sizeof (node));
 
     //sætter forrige nodes next til newNode
@@ -76,33 +73,30 @@ void createTempDeck(char file[]){
 }
 
 void dealCards() {
-    arr[0] = head;
-    arr[0]->isVisible = 1;
-    arr[0]->prev = NULL;
+    arr[0] = *head;
+    arr[0].isVisible = 1;
     node *current;
 
     //fills each columns head.
     for (int i = 1; i < 7; i++) {
-        arr[i] = arr[i - 1]->next;
-        arr[i]->isVisible = 0;
-        arr[i]->prev = NULL;
+        arr[i] = *arr[i - 1].next;
+        arr[i].isVisible = 0;
     }
-    arr[0]->nextInC = NULL;
-    node* last = arr[6];
+    arr[0].nextInC = NULL;
+    node* last = &arr[6];
 
     for(int i = 0; i < 10; i++){
         for (int j = 1; j < 7; ++j) {
             if(i > j+3){
                 continue;
             }
-            current = arr[j];
+            current = &arr[j];
             node *temp = last->next;
             last = temp;
 
             while(current->nextInC != NULL){
                 current = current->nextInC;
             }
-            temp->prev = current;
             current->nextInC = temp;
 
             if(i >= j-1){
@@ -115,120 +109,76 @@ void dealCards() {
     }
 }
 
-
+/*
 int isValid(node* dest, node* move){
-    if(dest==NULL){
-        return 1;
-    }
-
     int isSuitValid = 0, isRankValid = 0;
 
     //check for rank
-    if(isdigit(move->rank)){
-        if(move->rank == '9' && dest->rank == 'T' || move->rank == dest->rank - 1){
-            isRankValid = 1;
-        }
-    }
-    else{
-        if(move->rank == 'A' && dest->rank == '2' || move->rank == 'T' && dest->rank == 'J' ||
-           move->rank == 'J' && dest->rank == 'Q' || move->rank == 'Q' && dest->rank == 'K'){
-            isRankValid = 1;
-        }
-    }
+
+
     //check for suit
-    if(dest->suit != move->suit){
-        isSuitValid = 1;
-    }
-    //if both valid, card can be moved
-    if (isSuitValid == 1 && isRankValid == 1){
-        return 1;
-    }
-    else{
+    if(dest->suit == move->suit){
         return 0;
     }
-}
+    else
 
-void moveCard(char input[]) {
+} */
 
-    node *moveCard = NULL;
-    node *destCard;
-    int column, destColumn;
-    char *col = &input[1];
-    char *destCol = &input[8];
+/*
 
-    column = strtol(col, NULL, 10);
-    node* current = arr[column - 1];
+void moveCard(){
+    char input[9];
+    scanf("%s",input);
+    printf("%s", input);
+    node* moveCard;
+    node* destCard;
 
-    //finder kort som skal rykkes
-    while (current != NULL) {
-        if (current->rank == input[3] && current->suit == input[4]) {
-            moveCard = current;
-            break;
-        }
-        else {
+    if(input[0]=='C'){
+        node* current = &arr[input[1]];
+        while (current->nextInC != NULL){
+            if (current->nextInC->rank == input[3] && current->nextInC->suit == input[4]){
+                moveCard = current->nextInC;
+                destCard = &arr[input[8]];
+                if(destCard == NULL){  //hvis kollonen er tom
+
+                }
+                else{
+                while (destCard->nextInC != NULL){
+                    destCard = destCard->nextInC;
+                }
+                if(destCard->suit == 0)
+                }
+            }
             current = current->nextInC;
         }
     }
-    //hvis kortet ikke blev fundet, kommer der error besked.
-    if (moveCard == NULL) {
-        //print error message.
-    }
-    else {
-        destColumn = strtol(destCol, NULL, 10);
-        destCard = arr[destColumn - 1];
-        //finder kortet som der lægges på.
-        if(destCard !=NULL) {
-            while (destCard->nextInC != NULL) {
-                destCard = destCard->nextInC;
-            }
-        }
+    //tag også stilling til om en kolonne bliver tom så head = NULL
+    //og hvis der tilføjes noget i en tom kolonne bliver det lig head.
 
-        if (isValid(destCard, moveCard) == 1) {
-            //Omhandler hvor kortet var før
-            if (current->prev == NULL) {
-                arr[column - 1] = NULL;
-            }
-            else{
-                current->prev->isVisible = 1;
-                current = current->prev;
-                current->nextInC = NULL;
-            }
-            //omhandler hvor kortet skal hen.
-            if (destCard == NULL) {  //hvis dest-kolonnen er tom bliver det head for kolonnen.
-                moveCard->prev = NULL;
-                arr[destColumn - 1] = moveCard;
-            }
-            else{
-                moveCard->prev = destCard;
-                destCard->nextInC = moveCard;
-            }
-        }
-        //else { //print dette kort ikke kan rykkes }
-    }
 }
-
+*/
 void inputPrint(){
-    printf("LAST COMMAND: %s\n", lastCommand);
-    printf("MESSAGE: %s\n", message);
+    printf("LAST COMMAND: %s\n", "Last command");
+    printf("MESSAGE: %s\n", "Message");
     printf("INPUT >");
 }
 
 char print(){
     char printArr[23][100];
     memset(printArr, 0, 23*100);
-    node *current = arr[0];
+    node *current = &arr[0];
     int count;
     int longest = 0;
     int countNotNull = 0;
     for(int j = 0; j < 7; j++) {
-        current = arr[j];
+        current = &arr[j];
         count = 0;
         countNotNull = 0;
 
         for(int i = 0; i < 22; i++){
 
             if (current != NULL && current->isVisible == 1) {
-                sprintf(printArr[count], "%s %c%c ", printArr[count], current->rank, current->suit);
+                sprintf(printArr[count], "%s %c%c ", printArr[count], current->suit, current->rank);
                 current = current->nextInC;
                 countNotNull++;
             } else if (current != NULL && current->isVisible == 0) {
@@ -270,7 +220,7 @@ void SWtest() {
     int count = 0;
     node *current_node;
     for (int i = 0; i < 7; i++) {
-        current_node = arr[i];
+        current_node = &arr[i];
 
         while (current_node != NULL) {
             count++;
@@ -305,12 +255,12 @@ void SW() {
                 printf("\t[] F4");
             }
             foundation++;
-            printf("\n %c%c ", current_node->rank, current_node->suit);
+            printf("\n %c%c ", current_node->suit, current_node->rank);
             current_node = current_node->next;
             count=1;
         }
         else{
-            printf(" %c%c ", current_node->rank, current_node->suit);
+            printf(" %c%c ", current_node->suit, current_node->rank);
             current_node = current_node->next;
         }
     }
@@ -427,15 +377,10 @@ void twoSplit () {
 
 }
 int main(){
-    char input[10];
 
+    char input[10];
     while(1){
         scanf("%s",input);
-        //fylder last command feltet
-        for (int i = 0; i<10 ; i++){
-            lastCommand[i] = input[i];
-        }
-
         if(strcmp(input,"QQ")==0){
             QQ();
         }if(strcmp(input,"Q")==0){
@@ -449,12 +394,10 @@ int main(){
             SW();
         }if(strcmp(input,"SI")==0){
             twoSplit();
-        }if(input[7]=='C'){
-            moveCard(input);
-            print();
         }
     }
 
+    //moveCard();
     LD();
     SW();
     twoSplit();
@@ -464,10 +407,7 @@ int main(){
     //print();
     printf("\n");
     print();
-    //moveCard();
-    print();
-
-    //ResetGame();
+    ResetGame();
 
     /*node *current;
     current = &arr[5];
