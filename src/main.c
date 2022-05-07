@@ -16,7 +16,7 @@ typedef struct node{
     int isVisible;
 }node;
 
-node arr[7];
+node* arr[7];
 struct node* head = NULL;
 struct node* prevNode = NULL;
 char tempDeck[104];
@@ -76,30 +76,33 @@ void createTempDeck(char file[]){
 }
 
 void dealCards() {
-    arr[0] = *head;
-    arr[0].isVisible = 1;
+    arr[0] = head;
+    arr[0]->isVisible = 1;
+    arr[0]->prev = NULL;
     node *current;
 
     //fills each columns head.
     for (int i = 1; i < 7; i++) {
-        arr[i] = *arr[i - 1].next;
-        arr[i].isVisible = 0;
+        arr[i] = arr[i - 1]->next;
+        arr[i]->isVisible = 0;
+        arr[i]->prev = NULL;
     }
-    arr[0].nextInC = NULL;
-    node* last = &arr[6];
+    arr[0]->nextInC = NULL;
+    node* last = arr[6];
 
     for(int i = 0; i < 10; i++){
         for (int j = 1; j < 7; ++j) {
             if(i > j+3){
                 continue;
             }
-            current = &arr[j];
+            current = arr[j];
             node *temp = last->next;
             last = temp;
 
             while(current->nextInC != NULL){
                 current = current->nextInC;
             }
+            temp->prev = current;
             current->nextInC = temp;
 
             if(i >= j-1){
@@ -114,6 +117,10 @@ void dealCards() {
 
 
 int isValid(node* dest, node* move){
+    if(dest==NULL){
+        return 1;
+    }
+
     int isSuitValid = 0, isRankValid = 0;
 
     //check for rank
@@ -141,48 +148,66 @@ int isValid(node* dest, node* move){
     }
 }
 
-void moveCard(char input[]){
-    //char input[9];
-    //scanf("%s",input);
-    //printf("%s", input);
-    node* moveCard;
-    node* destCard;
+void moveCard(char input[]) {
+
+    node *moveCard = NULL;
+    node *destCard;
     int column, destColumn;
-    char* col = &input[1];
-    char* destCol = &input[8];
+    char *col = &input[1];
+    char *destCol = &input[8];
     //C4:5C->C3
-    if(input[0]=='C'){
-        column = strtol(col,NULL,10);
-        node* current = &arr[column-1];
 
-        while (current->nextInC != NULL){
-            if (current->nextInC->rank == input[3] && current->nextInC->suit == input[4]){
-                moveCard = current->nextInC;
-                destColumn = strtol(destCol,NULL,10);
-                destCard = &arr[destColumn-1];
+    column = strtol(col, NULL, 10);
+    node* current = arr[column - 1];
 
-                if(destCard == NULL){  //hvis dest-kolonnen er tom kan kortet bare rykkes
-                    arr[input[8]] = *moveCard;
-                }
-                else{
-                    while (destCard->nextInC != NULL){
-                        destCard = destCard->nextInC;
-                    }
-                    if(isValid(destCard,moveCard) == 1){
-                        current->nextInC = NULL;
-                        current->isVisible = 1;
-                        destCard->nextInC = moveCard;
-                        break;
-                    }
-                    else{ }
-                }
-            }
+    //finder kort som skal rykkes
+    while (current != NULL) {
+        if (current->rank == input[3] && current->suit == input[4]) {
+            moveCard = current;
+            break;
+        }
+        else {
             current = current->nextInC;
         }
     }
-    //tag også stilling til om en kolonne bliver tom så head = NULL
-    //og hvis der tilføjes noget i en tom kolonne bliver det lig head.
+    //hvis kortet ikke blev fundet, kommer der error besked.
+    if (moveCard == NULL) {
+        //print error message.
+    }
+    else {
+        destColumn = strtol(destCol, NULL, 10);
+        destCard = arr[destColumn - 1];
+        //finder kortet som der lægges på.
+        if(destCard !=NULL) {
+            while (destCard->nextInC != NULL) {
+                destCard = destCard->nextInC;
+            }
+        }
 
+        if (isValid(destCard, moveCard) == 1) {
+            //Omhandler hvor kortet var før
+            if (current->prev == NULL) {
+                arr[column - 1] = NULL;
+            }
+            else{
+                current->prev->isVisible = 1;
+                current = current->prev;
+                current->nextInC = NULL;
+            }
+            //omhandler hvor kortet skal hen.
+            if (destCard == NULL) {  //hvis dest-kolonnen er tom bliver det head for kolonnen.
+                moveCard->prev = NULL;
+                arr[destColumn - 1] = moveCard;
+            }
+            else{
+                moveCard->prev = destCard;
+                destCard->nextInC = moveCard;
+            }
+
+                //}
+                //else { //print dette kort ikke kan rykkes
+        }
+    }
 }
 
 void inputPrint(){
@@ -194,12 +219,12 @@ void inputPrint(){
 char print(){
     char printArr[23][100];
     memset(printArr, 0, 23*100);
-    node *current = &arr[0];
+    node *current = arr[0];
     int count;
     int longest = 0;
     int countNotNull = 0;
     for(int j = 0; j < 7; j++) {
-        current = &arr[j];
+        current = arr[j];
         count = 0;
         countNotNull = 0;
 
@@ -248,7 +273,7 @@ void SWtest() {
     int count = 0;
     node *current_node;
     for (int i = 0; i < 7; i++) {
-        current_node = &arr[i];
+        current_node = arr[i];
 
         while (current_node != NULL) {
             count++;
