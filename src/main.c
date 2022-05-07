@@ -2,6 +2,7 @@
 #include <memory.h>
 #include <stdlib.h>
 #include <ctype.h>
+#include <time.h>
 
 void QQ();
 void *malloc(size_t size);
@@ -424,9 +425,50 @@ void twoSplit () {
         }
         //current = current->next;
     }
-
 }
+int GetRandom(int lower, int upper){
+        int num = (rand() %(upper - lower + 1)) + lower;
+    return num;
+}
+
+void Shuffle(){
+    node *notShuffledCurrent = head;
+    node *shuffledHead = addCard('P','P');
+    node *temp = shuffledHead->prev;
+    temp->next=NULL;
+    shuffledHead->prev=NULL;
+
+    for (int i = 0; i < 51; ++i) {
+        addCard('P','P');
+    }
+    node *shuffledCur = shuffledHead;
+    while(notShuffledCurrent!=NULL){
+    int num = GetRandom(0,51);
+
+    for (int i = 0; i < num; ++i) {
+        shuffledCur=shuffledCur->next;
+    }
+
+        while(shuffledCur->rank != 'P'){
+            if(shuffledCur->next!=NULL){
+                shuffledCur=shuffledCur->next;
+            }else{
+                shuffledCur=shuffledHead;
+            }
+        }
+        shuffledCur->rank = notShuffledCurrent -> rank;
+        shuffledCur->suit = notShuffledCurrent -> suit;
+
+        notShuffledCurrent = notShuffledCurrent->next;
+        shuffledCur=shuffledHead;
+    }
+    head=shuffledHead;
+}
+
+
+
 int main(){
+    srand(time(0));
     char input[10];
 
     while(1){
@@ -435,7 +477,6 @@ int main(){
         for (int i = 0; i<10 ; i++){
             lastCommand[i] = input[i];
         }
-
         if(strcmp(input,"QQ")==0){
             QQ();
         }if(strcmp(input,"Q")==0){
@@ -452,6 +493,8 @@ int main(){
         }if(input[7]=='C'){
             moveCard(input);
             print();
+        }if(strcmp(input,"SR")==0){
+            Shuffle();
         }
     }
 
