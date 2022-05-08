@@ -607,7 +607,6 @@ int main(){
             lastCommand[i] = ' ';
         }
     }
-}
 
 //command to quit program.
 void QQ(){
