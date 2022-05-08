@@ -23,6 +23,7 @@ struct node* prevNode = NULL;
 char tempDeck[104];
 char message[15];
 char lastCommand[100];
+node* f[4];
 
 struct node *addFirst(char rank, char suit){
     node *newNode = malloc(sizeof (node));
@@ -83,13 +84,20 @@ void createTempDeck(char file[]){
         }
         j++;
     }
-
 }
 
 void dealCards() {
+    //initialize foundations.
+    f[0] = addCard('[',']');
+    f[1] = addCard('[',']');
+    f[2] = addCard('[',']');
+    f[3] = addCard('[',']');
+
+    //initialize first card
     arr[0] = head;
     arr[0]->isVisible = 1;
     arr[0]->prev = NULL;
+
     node *current;
 
     //fills each columns head.
@@ -127,35 +135,94 @@ void dealCards() {
 }
 
 
-int isValid(node* dest, node* move){
-    if(dest==NULL){
+int isValid(node* bigger, node* smaller){
+    if(bigger==NULL){
         return 1;
+    }
+    if(smaller->rank == '[' && bigger->rank == 'A'){
+        return 2;
     }
 
     int isSuitValid = 0, isRankValid = 0;
 
     //check for rank
-    if(isdigit(move->rank)){
-        if(move->rank == '9' && dest->rank == 'T' || move->rank == dest->rank - 1){
+    if(isdigit(smaller->rank)){
+        if(smaller->rank == '9' && bigger->rank == 'T' || smaller->rank == bigger->rank - 1){
             isRankValid = 1;
         }
     }
     else{
-        if(move->rank == 'A' && dest->rank == '2' || move->rank == 'T' && dest->rank == 'J' ||
-           move->rank == 'J' && dest->rank == 'Q' || move->rank == 'Q' && dest->rank == 'K'){
+        if(smaller->rank == 'A' && bigger->rank == '2' || smaller->rank == 'T' && bigger->rank == 'J' ||
+           smaller->rank == 'J' && bigger->rank == 'Q' || smaller->rank == 'Q' && bigger->rank == 'K'){
             isRankValid = 1;
         }
     }
+
     //check for suit
-    if(dest->suit != move->suit){
+    if(bigger->suit != smaller->suit){
         isSuitValid = 1;
     }
+    if(bigger->suit == smaller->suit){
+        isSuitValid = 2;
+    }
+
     //if both valid, card can be moved
     if (isSuitValid == 1 && isRankValid == 1){
         return 1;
     }
+    if (isSuitValid == 2 && isRankValid == 1){
+        return 2;
+    }
     else{
         return 0;
+    }
+}
+
+void placeInFoundation(int fNo, int column, node* move, node* columnTail){
+    node* foundation = f[fNo-1];
+    if(foundation == NULL){
+        //error message
+    }
+
+    if(isValid(move,foundation) == 2){
+        //Omhandler hvor kortet var før
+        if (columnTail->prev == NULL) {
+            arr[column - 1] = NULL;
+        }
+        else{
+            columnTail->prev->isVisible = 1;
+            columnTail= columnTail->prev;
+            columnTail->nextInC = NULL;
+        }
+
+        move->prev = foundation;
+        f[fNo-1] = move;
+    }
+}
+void moveFromFoundation(char input[]){
+    char *fNumber = &input[1];
+    int fNo = strtol(fNumber, NULL, 10);;
+    node* destCard;
+    node* fCard = f[fNo-1];
+    char *destCol = &input[5];
+
+    int destColumn = strtol(destCol, NULL, 10);
+    destCard = arr[destColumn - 1];
+
+    if (destCard != NULL) {
+        while (destCard->nextInC != NULL) {
+            destCard = destCard->nextInC;
+        }
+    }
+    if(isValid(destCard,fCard) == 1) {
+        f[fNo-1] = fCard->prev;
+
+        if (destCard == NULL) {
+            arr[destColumn - 1] = fCard;
+        } else {
+            fCard->prev = destCard;
+            destCard->nextInC = fCard;
+        }
     }
 }
 
@@ -166,6 +233,7 @@ void moveCard(char input[]) {
     int column, destColumn;
     char *col = &input[1];
     char *destCol = &input[8];
+    //C4:5C->C3
 
     column = strtol(col, NULL, 10);
     node* current = arr[column - 1];
@@ -185,36 +253,42 @@ void moveCard(char input[]) {
         //print error message.
     }
     else {
-        destColumn = strtol(destCol, NULL, 10);
-        destCard = arr[destColumn - 1];
-        //finder kortet som der lægges på.
-        if(destCard !=NULL) {
-            while (destCard->nextInC != NULL) {
-                destCard = destCard->nextInC;
-            }
+        if (input[7] == 'F') {
+            destColumn = strtol(&input[8], NULL, 10);
+            placeInFoundation(destColumn, column, moveCard, current);
         }
+        else {
+            destColumn = strtol(destCol, NULL, 10);
+            destCard = arr[destColumn - 1];
+            //finder kortet som der lægges på.
+            if (destCard != NULL) {
+                while (destCard->nextInC != NULL) {
+                    destCard = destCard->nextInC;
+                }
+            }
 
-        if (isValid(destCard, moveCard) == 1) {
-            //Omhandler hvor kortet var før
-            if (current->prev == NULL) {
-                arr[column - 1] = NULL;
-            }
-            else{
-                current->prev->isVisible = 1;
-                current = current->prev;
-                current->nextInC = NULL;
-            }
-            //omhandler hvor kortet skal hen.
-            if (destCard == NULL) {  //hvis dest-kolonnen er tom bliver det head for kolonnen.
-                moveCard->prev = NULL;
-                arr[destColumn - 1] = moveCard;
-            }
-            else{
-                moveCard->prev = destCard;
-                destCard->nextInC = moveCard;
+            if (isValid(destCard, moveCard) == 1) {
+                //Omhandler hvor kortet var før
+                if (current->prev == NULL) {
+                    arr[column - 1] = NULL;
+                } else {
+                    current->prev->isVisible = 1;
+                    current = current->prev;
+                    current->nextInC = NULL;
+                }
+                //omhandler hvor kortet skal hen.
+                if (destCard == NULL) {  //hvis dest-kolonnen er tom bliver det head for kolonnen.
+                    moveCard->prev = NULL;
+                    arr[destColumn - 1] = moveCard;
+                } else {
+                    moveCard->prev = destCard;
+                    destCard->nextInC = moveCard;
+                }
+
+                //}
+                //else { //print dette kort ikke kan rykkes
             }
         }
-        //else { //print dette kort ikke kan rykkes }
     }
 }
 
@@ -254,21 +328,21 @@ char print(){
             count++;
         }
     }
-    printf(" C1  C2  C3  C4  C5  C6  C7\n\n");
+    printf("\n C1  C2  C3  C4  C5  C6  C7\n\n");
     for(int i = 0; i < 22; i++){
         if(i > longest)
             continue;
         if(i == 0){
-            sprintf(printArr[i],"%s  %c%c F1", printArr[i], 't', 't');
+            sprintf(printArr[i],"%s  %c%c F1", printArr[i], f[0]->rank, f[0]->suit);
         }
         if(i == 2){
-            sprintf(printArr[i],"%s  %c%c F2", printArr[i], 't', 't');
+            sprintf(printArr[i],"%s  %c%c F2", printArr[i], f[1]->rank, f[1]->suit);
         }
         if(i == 4){
-            sprintf(printArr[i],"%s  %c%c F3", printArr[i], 't', 't');
+            sprintf(printArr[i],"%s  %c%c F3", printArr[i], f[2]->rank, f[2]->suit);
         }
         if(i == 6){
-            sprintf(printArr[i],"%s  %c%c F4", printArr[i], 't', 't');
+            sprintf(printArr[i],"%s  %c%c F4", printArr[i], f[3]->rank, f[3]->suit);
         }
         sprintf(printArr[i],"%s\n", printArr[i]);
         printf("%s",printArr[i]);
@@ -329,9 +403,7 @@ void SW() {
     inputPrint();
 }
 
-void LD(char file[]){
-    createTempDeck(file);
-
+void bracketPrint(){
     printf(" C1  C2  C3  C4  C5  C6  C7\n\n");
 
     int foundation = 0;
@@ -361,6 +433,10 @@ void LD(char file[]){
     }
     printf("\n");
     inputPrint();
+}
+void LD(char file[]){
+    createTempDeck(file);
+    bracketPrint();
 }
 
 void StartScreen(){
@@ -512,38 +588,25 @@ int main(){
             SW();
         }if(strcmp(input,"SI")==0){
             twoSplit();
-        }if(input[7]=='C'){
+            bracketPrint();
+        }if(input[7]=='C' || input[7]=='F'){
             moveCard(input);
             print();
         }if(strcmp(input,"SR")==0){
             Shuffle();
-        }
+        }if(input[0]=='F'){
+            moveFromFoundation(input);
+            print();
+        }//hvis input[1] == F så kør foundation metode.
     }
 
-    SW();
-    twoSplit();
-    //createTempDeck("Deck");
-    dealCards();
-    //cardStartVisibility();
-    //print();
-    printf("\n");
-    print();
-    //moveCard();
-    print();
 
-    //ResetGame();
 
-    /*node *current;
-    current = &arr[5];
-    while (current !=NULL){
-        printf("%c%c",current->suit,current->rank);
-        //printf("%d ",current->nextInC);
-        current = current->nextInC;
-    }*/
-
-    //printf("\n\n");
-    //SWtest();
-    //printf("\n%c%c ", arr[0].suit, arr[0].rank);
+        //tømmer command igen.
+        for (int i = 0; i<10 ; i++){
+            lastCommand[i] = ' ';
+        }
+    }
 }
 
 //command to quit program.
