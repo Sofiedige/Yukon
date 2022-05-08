@@ -6,7 +6,7 @@
 
 void QQ();
 void *malloc(size_t size);
-
+int strcmp (const char* str1, const char* str2);
 
 typedef struct node{
     char suit;
@@ -22,7 +22,7 @@ struct node* head = NULL;
 struct node* prevNode = NULL;
 char tempDeck[104];
 char message[15];
-char lastCommand[10];
+char lastCommand[100];
 
 struct node *addFirst(char rank, char suit){
     node *newNode = malloc(sizeof (node));
@@ -53,16 +53,25 @@ struct node *addCard(char rank, char suit){
 
     return newNode;
 }
+int file_exists(const char *filename)
+{
+    FILE *fp = fopen(filename, "r");
+    int is_exist = 0;
+    if (fp != NULL)
+    {
+        is_exist = 1;
+        fclose(fp); // close the file
+    }
+    return is_exist;
+}
 
 void createTempDeck(char file[]){
     FILE *in = fopen(file,"r");
-    if(!in){
+    if(!file_exists(file)){
         printf("fejl\n");
     }
-    int wordCount;
-    fscanf(in,"%d ",&wordCount);
 
-    for (int i = 0; i < wordCount; ++i) {
+    for (int i = 0; i < 104; ++i) {
         fscanf(in,"%c\n",&tempDeck[i]);
     }
 
@@ -74,6 +83,7 @@ void createTempDeck(char file[]){
         }
         j++;
     }
+
 }
 
 void dealCards() {
@@ -319,8 +329,9 @@ void SW() {
     inputPrint();
 }
 
-void LD(){
-    createTempDeck("Deck");
+void LD(char file[]){
+    createTempDeck(file);
+
     printf(" C1  C2  C3  C4  C5  C6  C7\n\n");
 
     int foundation = 0;
@@ -363,9 +374,6 @@ void ResetGame(){
     print();
 }
 
-int Sl(){
-}
-int strcmp (const char* str1, const char* str2);
 void twoSplit () {
     int len = 52;
     node *current = head;
@@ -448,7 +456,6 @@ void Shuffle(){
     for (int i = 0; i < num; ++i) {
         shuffledCur=shuffledCur->next;
     }
-
         while(shuffledCur->rank != 'P'){
             if(shuffledCur->next!=NULL){
                 shuffledCur=shuffledCur->next;
@@ -469,23 +476,38 @@ void Shuffle(){
 
 int main(){
     srand(time(0));
-    char input[10];
+    char input[100];
 
-    while(1){
-        scanf("%s",input);
+    while(1) {
+        scanf("%s", input);
         //fylder last command feltet
-        for (int i = 0; i<10 ; i++){
+        for (int i = 0; i < 10; i++) {
             lastCommand[i] = input[i];
         }
-        if(strcmp(input,"QQ")==0){
+        if (strcmp(input, "QQ") == 0) {
             QQ();
-        }if(strcmp(input,"Q")==0){
+        }
+        if (strcmp(input, "Q") == 0) {
             ResetGame();
-        }if(strcmp(input,"P")==0){
+        }
+        if (strcmp(input, "P") == 0) {
             dealCards();
             print();
-        }if(strcmp(input,"LD")==0){
-            LD();
+        }if(input[0] == 'L' && input[1] == 'D' && input[2]=='<' ){
+            char input2[100];
+
+            for (int i = 0; i < 100; ++i) {
+                if(input[i+3]=='>'){
+                    input2[i]='\0';
+                    break;
+                }
+                input2[i]=input[i+3];
+            }
+            LD(input2);
+
+
+        }if(strcmp(input,"LD")==0&& input[3]!='<'){
+            LD("Deck");
         }if(strcmp(input,"SW")==0){
             SW();
         }if(strcmp(input,"SI")==0){
@@ -498,7 +520,6 @@ int main(){
         }
     }
 
-    LD();
     SW();
     twoSplit();
     //createTempDeck("Deck");
