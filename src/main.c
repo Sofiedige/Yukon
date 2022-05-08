@@ -77,14 +77,17 @@ void createTempDeck(char file[]){
 }
 
 void dealCards() {
+    //initialize foundations.
     f[0] = addCard('[',']');
     f[1] = addCard('[',']');
     f[2] = addCard('[',']');
     f[3] = addCard('[',']');
 
+    //initialize first card
     arr[0] = head;
     arr[0]->isVisible = 1;
     arr[0]->prev = NULL;
+
     node *current;
 
     //fills each columns head.
@@ -126,6 +129,9 @@ int isValid(node* bigger, node* smaller){
     if(bigger==NULL){
         return 1;
     }
+    if(smaller->rank == '[' && bigger->rank == 'A'){
+        return 2;
+    }
 
     int isSuitValid = 0, isRankValid = 0;
 
@@ -141,10 +147,6 @@ int isValid(node* bigger, node* smaller){
             isRankValid = 1;
         }
     }
-    if(smaller->rank == '[' && bigger->rank == 'A'){
-        return 2;
-    }
-
 
     //check for suit
     if(bigger->suit != smaller->suit){
@@ -166,7 +168,6 @@ int isValid(node* bigger, node* smaller){
     }
 }
 
-//lav foundation metode.
 void placeInFoundation(int fNo, int column, node* move, node* columnTail){
     node* foundation = f[fNo-1];
     if(foundation == NULL){
