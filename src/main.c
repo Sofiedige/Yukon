@@ -54,6 +54,21 @@ struct node *addCard(char rank, char suit){
 
     return newNode;
 }
+
+void SD(char file[]){
+    FILE *out_file = fopen(file, "w"); // write only
+    if (out_file == NULL)
+    {
+        printf("Error, could not open file name\n");
+    }
+
+    node* current = head;
+    while (current != NULL){
+        fprintf(out_file, "%c%c\n", current->rank,current->suit); // write to file
+        current = current->next;
+    }
+}
+
 int file_exists(const char *filename)
 {
     FILE *fp = fopen(filename, "r");
@@ -444,8 +459,6 @@ void StartScreen(){
 
 }
 
-
-
 void ResetGame(){
     print();
 }
@@ -581,9 +594,37 @@ int main(){
             }
             LD(input2);
 
-
         }if(strcmp(input,"LD")==0&& input[3]!='<'){
             LD("Deck");
+        }if(input[0] == 'L' && input[1] == 'D' && input[2]=='<' ){
+            char input2[100];
+
+            for (int i = 0; i < 100; ++i) {
+                if(input[i+3]=='>'){
+                    input2[i]='\0';
+                    break;
+                }
+                input2[i]=input[i+3];
+            }
+            LD(input2);
+
+        }if(input[0] == 'S' && input[1] == 'D' && input[2]=='<'){
+            char input3[100];
+
+            for (int i = 0; i < 100; ++i) {
+                if(input[i+3]=='>'){
+                    input3[i]='\0';
+                    break;
+                }
+                input3[i]=input[i+3];
+            }
+            SD(input3);
+            bracketPrint();
+
+        }if (strcmp(input,"SD")==0 && input[2]!='<'){
+            SD("cards.txt");
+            bracketPrint();
+
         }if(strcmp(input,"SW")==0){
             SW();
         }if(strcmp(input,"SI")==0){
@@ -599,7 +640,6 @@ int main(){
             print();
         }//hvis input[1] == F så kør foundation metode.
     }
-
 
 
         //tømmer command igen.
