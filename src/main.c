@@ -493,13 +493,13 @@ void ResetGame(){
 }
 
 void twoSplit (int hopCount) {
-    if(hopCount >52 ||hopCount <0){
+    //brugeren kan indtaste tal fra 1-51
+    if(hopCount >51 ||hopCount <1){
         printf("invalid split size value\n");
         return;
     }
 
     node *current = head;
-//kan være brugerens input, men halveres i stedet.
 
     for (int i = 0; i < hopCount; i++) {
         current = current->next;
@@ -507,7 +507,7 @@ void twoSplit (int hopCount) {
 
     node *frontSplit = current;
     node *backSplit = current->next;
-    //deler listen op i to
+    //deler listen op ved inputet fra brugeren
     frontSplit->next = NULL;
     backSplit->prev = NULL;
 
@@ -554,7 +554,7 @@ void twoSplit (int hopCount) {
             }
         }
     }
-    sprintf(message,"OK");
+    sprintf(message,"You shuffled pile");
 }
 int GetRandom(int lower, int upper){
         int num = (rand() %(upper - lower + 1)) + lower;
@@ -592,7 +592,7 @@ void Shuffle(){
         shuffledCur=shuffledHead;
     }
     head=shuffledHead;
-    sprintf(message,"OK");
+    sprintf(message,"Nice shuffle");
 }
 
 int main(){
@@ -654,10 +654,10 @@ int main(){
 
         }else if(strcmp(input,"SW")==0 && startupPhase == 1 && playingPhase == 0){
             SW();
-        }if(strcmp(input,"SI")==0){
+        }else if(strcmp(input,"SI")==0){
             twoSplit(GetRandom(1,51));
             bracketPrint();
-        } if(input[0] == 'S' && input[1] == 'I' && input[2]=='<'){
+        }else if(input[0] == 'S' && input[1] == 'I' && input[2]=='<'){
             char value[2];
             int specifiedValue;
             for (int i = 0; i < 3; ++i) {
@@ -668,9 +668,7 @@ int main(){
             specifiedValue = specifiedValue + strtol(ten,NULL,10);
             twoSplit(specifiedValue);
             SW();
-        }
-
-        if(input[7]=='C' || input[7]=='F'){
+        }else if(input[7]=='C' || input[7]=='F'){
             moveCard(input);
             print();
             if(isWinner()){
@@ -706,5 +704,4 @@ void QQ(){
     exit(0);
 }
 
-//command to quit and starup game. Restart game.
 
