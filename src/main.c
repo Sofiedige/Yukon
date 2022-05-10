@@ -492,18 +492,22 @@ void ResetGame(){
     SD("ResetFile");
 }
 
-void twoSplit () {
-    int len = 52;
+void twoSplit (int hopCount) {
+    //brugeren kan indtaste tal fra 1-51
+    if(hopCount >51 ||hopCount <1){
+        printf("invalid split size value\n");
+        return;
+    }
+
     node *current = head;
-//kan være brugerens input, men halveres i stedet.
-    int hopCount = (len / 2)-1;
+
     for (int i = 0; i < hopCount; i++) {
         current = current->next;
     }
 
     node *frontSplit = current;
     node *backSplit = current->next;
-    //deler listen op i to
+    //deler listen op ved inputet fra brugeren
     frontSplit->next = NULL;
     backSplit->prev = NULL;
 
@@ -523,33 +527,34 @@ void twoSplit () {
         } else {
             //for at den indsætter både front og backsplit
             if (counter % 2 == 1) {
-
-                temp->next=frontSplit;
-                if (frontSplit->prev != NULL) {
-                    frontSplit = frontSplit->prev;
-                    frontSplit->next = NULL;
-                } else
-                    frontSplit = NULL;
-                temp->next->prev = temp;
-                temp=temp->next;
-                temp->next=NULL;
+                if(frontSplit != NULL){
+                    temp->next=frontSplit;
+                    if (frontSplit->prev != NULL) {
+                        frontSplit = frontSplit->prev;
+                        frontSplit->next = NULL;
+                    } else
+                        frontSplit = NULL;
+                    temp->next->prev = temp;
+                    temp=temp->next;
+                    temp->next=NULL;
+                }
 
             } else {
-
-                temp->next=backSplit;
-                if (backSplit->next != NULL) {
-                    backSplit = backSplit->next;
-                    backSplit->prev = NULL;
-                }else
-                    backSplit = NULL;
-                temp->next->prev = temp;
-                temp=temp->next;
-                temp->next=NULL;
-
+                if(backSplit != NULL){
+                    temp->next=backSplit;
+                    if (backSplit->next != NULL) {
+                        backSplit = backSplit->next;
+                        backSplit->prev = NULL;
+                    }else
+                        backSplit = NULL;
+                    temp->next->prev = temp;
+                    temp=temp->next;
+                    temp->next=NULL;
+                }
             }
         }
     }
-    sprintf(message,"OK");
+    sprintf(message,"You shuffled pile");
 }
 int GetRandom(int lower, int upper){
         int num = (rand() %(upper - lower + 1)) + lower;
@@ -587,7 +592,7 @@ void Shuffle(){
         shuffledCur=shuffledHead;
     }
     head=shuffledHead;
-    sprintf(message,"OK");
+    sprintf(message,"Nice shuffle");
 }
 
 int main(){
@@ -649,21 +654,31 @@ int main(){
 
         }else if(strcmp(input,"SW")==0 && startupPhase == 1 && playingPhase == 0){
             SW();
-        }else if(strcmp(input,"SI")==0 && startupPhase == 1 && playingPhase == 0){
-            twoSplit();
+        }else if(strcmp(input,"SI")==0){
+            twoSplit(GetRandom(1,51));
             bracketPrint();
-        }else if(input[0]=='F' && playingPhase==1 && startupPhase == 0){
-        printf("hell");
-        moveFromFoundation(input);
-        print();
-        }else if(input[0]=='C' && playingPhase==1 || input[7]=='F' && playingPhase == 1){
+        }else if(input[0] == 'S' && input[1] == 'I' && input[2]=='<'){
+            char value[2];
+            int specifiedValue;
+            for (int i = 0; i < 3; ++i) {
+                value[i]=input[i+3];
+            }
+            char *one = &value[1], *ten = &value[0];
+            specifiedValue = strtol(one,NULL,10);
+            specifiedValue = specifiedValue + strtol(ten,NULL,10);
+            twoSplit(specifiedValue);
+            SW();
+        }else if(input[7]=='C' || input[7]=='F'){
             moveCard(input);
             print();
             if(isWinner()){
                 break;
             }
-        }else if(strcmp(input,"SR")==0 && playingPhase==0 && startupPhase == 1) {
+        }else if(strcmp(input,"SR")==0 && playingPhase==0 && startupPhase == 1){
             Shuffle();
+        }else if(input[0]=='F' && playingPhase==1 && startupPhase == 0){
+            moveFromFoundation(input);
+            print();
         }else{
             sprintf(message,"Wrong input");
             if(head == NULL){
@@ -677,7 +692,7 @@ int main(){
             }
         }
     }
-            
+
         //tømmer command igen.
         for (int i = 0; i<10 ; i++){
             lastCommand[i] = ' ';
@@ -689,5 +704,4 @@ void QQ(){
     exit(0);
 }
 
-//command to quit and starup game. Restart game.
 
