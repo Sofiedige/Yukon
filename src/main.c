@@ -489,24 +489,21 @@ void ResetGame(){
     print();
 }
 
-void twoSplit (int value) {
-    if(value >52 || value <0){
+void twoSplit (int hopCount) {
+    if(hopCount >52 ||hopCount <0){
         printf("invalid split size value\n");
         return;
     }
-    node *frontSplit [value*2];
-    node *backSplit [104-(value*2)];
 
-    int len = 52;
     node *current = head;
 //kan være brugerens input, men halveres i stedet.
-    int hopCount = (len / 2)-1;
+
     for (int i = 0; i < hopCount; i++) {
         current = current->next;
     }
 
-    frontSplit = current;
-    backSplit = current->next;
+    node *frontSplit = current;
+    node *backSplit = current->next;
     //deler listen op i to
     frontSplit->next = NULL;
     backSplit->prev = NULL;
@@ -527,29 +524,30 @@ void twoSplit (int value) {
         } else {
             //for at den indsætter både front og backsplit
             if (counter % 2 == 1) {
-
-                temp->next=frontSplit;
-                if (frontSplit->prev != NULL) {
-                    frontSplit = frontSplit->prev;
-                    frontSplit->next = NULL;
-                } else
-                    frontSplit = NULL;
-                temp->next->prev = temp;
-                temp=temp->next;
-                temp->next=NULL;
+                if(frontSplit != NULL){
+                    temp->next=frontSplit;
+                    if (frontSplit->prev != NULL) {
+                        frontSplit = frontSplit->prev;
+                        frontSplit->next = NULL;
+                    } else
+                        frontSplit = NULL;
+                    temp->next->prev = temp;
+                    temp=temp->next;
+                    temp->next=NULL;
+                }
 
             } else {
-
-                temp->next=backSplit;
-                if (backSplit->next != NULL) {
-                    backSplit = backSplit->next;
-                    backSplit->prev = NULL;
-                }else
-                    backSplit = NULL;
-                temp->next->prev = temp;
-                temp=temp->next;
-                temp->next=NULL;
-
+                if(backSplit != NULL){
+                    temp->next=backSplit;
+                    if (backSplit->next != NULL) {
+                        backSplit = backSplit->next;
+                        backSplit->prev = NULL;
+                    }else
+                        backSplit = NULL;
+                    temp->next->prev = temp;
+                    temp=temp->next;
+                    temp->next=NULL;
+                }
             }
         }
     }
@@ -660,9 +658,22 @@ int main(){
         }if(strcmp(input,"SW")==0){
             SW();
         }if(strcmp(input,"SI")==0){
-            twoSplit();
+            twoSplit(GetRandom(1,51));
             bracketPrint();
-        }if(input[7]=='C' || input[7]=='F'){
+        } if(input[0] == 'S' && input[1] == 'I' && input[2]=='<'){
+            char value[2];
+            int specifiedValue;
+            for (int i = 0; i < 3; ++i) {
+                value[i]=input[i+3];
+            }
+            char *one = &value[1], *ten = &value[0];
+            specifiedValue = strtol(one,NULL,10);
+            specifiedValue = specifiedValue + strtol(ten,NULL,10);
+            twoSplit(specifiedValue);
+            SW();
+        }
+
+        if(input[7]=='C' || input[7]=='F'){
             moveCard(input);
             print();
         }if(strcmp(input,"SR")==0){
