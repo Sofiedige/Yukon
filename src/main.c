@@ -489,7 +489,14 @@ void ResetGame(){
     print();
 }
 
-void twoSplit () {
+void twoSplit (int value) {
+    if(value >52 || value <0){
+        printf("invalid split size value\n");
+        return;
+    }
+    node *frontSplit [value*2];
+    node *backSplit [104-(value*2)];
+
     int len = 52;
     node *current = head;
 //kan være brugerens input, men halveres i stedet.
@@ -498,8 +505,8 @@ void twoSplit () {
         current = current->next;
     }
 
-    node *frontSplit = current;
-    node *backSplit = current->next;
+    frontSplit = current;
+    backSplit = current->next;
     //deler listen op i to
     frontSplit->next = NULL;
     backSplit->prev = NULL;
@@ -665,7 +672,6 @@ int main(){
             print();
         }//hvis input[1] == F så kør foundation metode.
     }
-
 
         //tømmer command igen.
         for (int i = 0; i<10 ; i++){
