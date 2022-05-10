@@ -507,7 +507,7 @@ void twoSplit (int hopCount) {
 
     node *frontSplit = current;
     node *backSplit = current->next;
-    //deler listen op ved inputet fra brugeren
+    //deler listen op ved inputtet fra brugeren
     frontSplit->next = NULL;
     backSplit->prev = NULL;
 
@@ -655,7 +655,8 @@ int main(){
         }else if(strcmp(input,"SW")==0 && startupPhase == 1 && playingPhase == 0){
             SW();
         }else if(strcmp(input,"SI")==0){
-            twoSplit(GetRandom(1,51));
+            int u =GetRandom(1,51);
+            twoSplit(u);
             bracketPrint();
         }else if(input[0] == 'S' && input[1] == 'I' && input[2]=='<'){
             char value[2];
@@ -667,7 +668,7 @@ int main(){
             specifiedValue = strtol(one,NULL,10);
             specifiedValue = specifiedValue + strtol(ten,NULL,10);
             twoSplit(specifiedValue);
-            SW();
+            bracketPrint();
         }else if(input[0]=='F' && playingPhase==1 && startupPhase == 0){
             moveFromFoundation(input);
             print();
