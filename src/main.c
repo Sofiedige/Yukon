@@ -454,10 +454,36 @@ void LD(char file[]){
     bracketPrint();
 }
 
-void StartScreen(){
+void StartScreen() {
     printf(" C1  C2  C3  C4  C5  C6  C7\n\n");
+    int count = 0;
+    int foundation = 0;
+    for (int i = 0; i < 7 ; ++i) {
+        count++;
 
-}
+            if (foundation == 0) {
+                printf("\t\t\t\t\t\t\t[] F1");
+                printf("\n\n");
+            }
+            if (foundation == 2) {
+                printf("\t\t\t\t\t\t\t[] F2");
+                printf("\n\n");
+            }
+            if (foundation == 4) {
+                printf("\t\t\t\t\t\t\t[] F3");
+                printf("\n\n");
+            }
+            if (foundation == 6) {
+                printf("\t\t\t\t\t\t\t[] F4");
+                printf("\n\n");
+            }
+
+            foundation++;
+        }
+        inputPrint();
+        }
+
+
 
 void ResetGame(){
     print();
@@ -466,15 +492,15 @@ void ResetGame(){
 void twoSplit () {
     int len = 52;
     node *current = head;
-//kan være brugerens input, sætter det bare til halvdelen
+//kan være brugerens input, men halveres i stedet.
     int hopCount = (len / 2)-1;
     for (int i = 0; i < hopCount; i++) {
         current = current->next;
     }
 
-    // Now cut at current
     node *frontSplit = current;
     node *backSplit = current->next;
+    //deler listen op i to
     frontSplit->next = NULL;
     backSplit->prev = NULL;
 
@@ -489,13 +515,12 @@ void twoSplit () {
             head = frontSplit;
             temp = frontSplit;
 
-            //current = shuffleHead;
-            //prevNode = frontSplit;
             frontSplit = frontSplit->prev;
             temp->prev = NULL;
         } else {
+            //for at den indsætter både front og backsplit
             if (counter % 2 == 1) {
-                //current = backSplit;
+
                 temp->next=frontSplit;
                 if (frontSplit->prev != NULL) {
                     frontSplit = frontSplit->prev;
@@ -507,7 +532,7 @@ void twoSplit () {
                 temp->next=NULL;
 
             } else {
-                //current = frontSplit;
+
                 temp->next=backSplit;
                 if (backSplit->next != NULL) {
                     backSplit = backSplit->next;
@@ -520,7 +545,6 @@ void twoSplit () {
 
             }
         }
-        //current = current->next;
     }
 }
 int GetRandom(int lower, int upper){
@@ -565,6 +589,7 @@ void Shuffle(){
 
 int main(){
     srand(time(0));
+    StartScreen();
     char input[100];
 
     while(1) {
@@ -654,3 +679,4 @@ void QQ(){
 }
 
 //command to quit and starup game. Restart game.
+
