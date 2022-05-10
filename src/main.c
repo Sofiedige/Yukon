@@ -668,6 +668,9 @@ int main(){
             specifiedValue = specifiedValue + strtol(ten,NULL,10);
             twoSplit(specifiedValue);
             SW();
+        }else if(input[0]=='F' && playingPhase==1 && startupPhase == 0){
+            moveFromFoundation(input);
+            print();
         }else if(input[7]=='C' || input[7]=='F'){
             moveCard(input);
             print();
@@ -676,9 +679,6 @@ int main(){
             }
         }else if(strcmp(input,"SR")==0 && playingPhase==0 && startupPhase == 1){
             Shuffle();
-        }else if(input[0]=='F' && playingPhase==1 && startupPhase == 0){
-            moveFromFoundation(input);
-            print();
         }else{
             sprintf(message,"Wrong input");
             if(head == NULL){
