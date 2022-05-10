@@ -492,11 +492,15 @@ void ResetGame(){
     SD("ResetFile");
 }
 
-void twoSplit () {
-    int len = 52;
+void twoSplit (int hopCount) {
+    if(hopCount >52 ||hopCount <0){
+        printf("invalid split size value\n");
+        return;
+    }
+
     node *current = head;
 //kan være brugerens input, men halveres i stedet.
-    int hopCount = (len / 2)-1;
+
     for (int i = 0; i < hopCount; i++) {
         current = current->next;
     }
@@ -523,29 +527,30 @@ void twoSplit () {
         } else {
             //for at den indsætter både front og backsplit
             if (counter % 2 == 1) {
-
-                temp->next=frontSplit;
-                if (frontSplit->prev != NULL) {
-                    frontSplit = frontSplit->prev;
-                    frontSplit->next = NULL;
-                } else
-                    frontSplit = NULL;
-                temp->next->prev = temp;
-                temp=temp->next;
-                temp->next=NULL;
+                if(frontSplit != NULL){
+                    temp->next=frontSplit;
+                    if (frontSplit->prev != NULL) {
+                        frontSplit = frontSplit->prev;
+                        frontSplit->next = NULL;
+                    } else
+                        frontSplit = NULL;
+                    temp->next->prev = temp;
+                    temp=temp->next;
+                    temp->next=NULL;
+                }
 
             } else {
-
-                temp->next=backSplit;
-                if (backSplit->next != NULL) {
-                    backSplit = backSplit->next;
-                    backSplit->prev = NULL;
-                }else
-                    backSplit = NULL;
-                temp->next->prev = temp;
-                temp=temp->next;
-                temp->next=NULL;
-
+                if(backSplit != NULL){
+                    temp->next=backSplit;
+                    if (backSplit->next != NULL) {
+                        backSplit = backSplit->next;
+                        backSplit->prev = NULL;
+                    }else
+                        backSplit = NULL;
+                    temp->next->prev = temp;
+                    temp=temp->next;
+                    temp->next=NULL;
+                }
             }
         }
     }
@@ -649,10 +654,23 @@ int main(){
 
         }else if(strcmp(input,"SW")==0 && startupPhase == 1 && playingPhase == 0){
             SW();
-        }else if(strcmp(input,"SI")==0 && startupPhase == 1 && playingPhase == 0){
-            twoSplit();
+        }if(strcmp(input,"SI")==0){
+            twoSplit(GetRandom(1,51));
             bracketPrint();
-        }else if(input[7]=='C' && playingPhase==1|| input[7]=='F' && playingPhase == 1){
+        } if(input[0] == 'S' && input[1] == 'I' && input[2]=='<'){
+            char value[2];
+            int specifiedValue;
+            for (int i = 0; i < 3; ++i) {
+                value[i]=input[i+3];
+            }
+            char *one = &value[1], *ten = &value[0];
+            specifiedValue = strtol(one,NULL,10);
+            specifiedValue = specifiedValue + strtol(ten,NULL,10);
+            twoSplit(specifiedValue);
+            SW();
+        }
+
+        if(input[7]=='C' || input[7]=='F'){
             moveCard(input);
             print();
             if(isWinner()){
@@ -676,7 +694,7 @@ int main(){
             }
         }
     }
-            
+
         //tømmer command igen.
         for (int i = 0; i<10 ; i++){
             lastCommand[i] = ' ';
