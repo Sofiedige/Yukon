@@ -459,8 +459,8 @@ void StartScreen(){
 
 }
 
-void ResetGame(){
-    print();
+void ResetGame(char input2[]){
+    LD(input2);
 }
 
 void twoSplit () {
@@ -566,8 +566,12 @@ void Shuffle(){
 int main(){
     srand(time(0));
     char input[100];
+    int playingPhase = 0;
+    int shufflePhase = 1;
+
 
     while(1) {
+        char input2[100];
         scanf("%s", input);
         //fylder last command feltet
         for (int i = 0; i < 10; i++) {
@@ -576,15 +580,13 @@ int main(){
         if (strcmp(input, "QQ") == 0) {
             QQ();
         }
-        if (strcmp(input, "Q") == 0) {
-            ResetGame();
-        }
-        if (strcmp(input, "P") == 0) {
+
+        if (strcmp(input, "P") == 0 && playingPhase==0&&shufflePhase==1) {
             dealCards();
             print();
-        }if(input[0] == 'L' && input[1] == 'D' && input[2]=='<' ){
-            char input2[100];
-
+            playingPhase = 1;
+            shufflePhase = 0;
+        }if(input[0] == 'L' && input[1] == 'D' && input[2]=='<' && playingPhase == 0 && shufflePhase == 1){
             for (int i = 0; i < 100; ++i) {
                 if(input[i+3]=='>'){
                     input2[i]='\0';
@@ -593,22 +595,19 @@ int main(){
                 input2[i]=input[i+3];
             }
             LD(input2);
-
-        }if(strcmp(input,"LD")==0&& input[3]!='<'){
+        }if(strcmp(input,"LD")==0&& input[2]!='<' && playingPhase == 0 && shufflePhase==1){
             LD("Deck");
-        }if(input[0] == 'L' && input[1] == 'D' && input[2]=='<' ){
-            char input2[100];
 
-            for (int i = 0; i < 100; ++i) {
-                if(input[i+3]=='>'){
-                    input2[i]='\0';
-                    break;
-                }
-                input2[i]=input[i+3];
+        }if (strcmp(input, "Q") == 0 && playingPhase==1&&shufflePhase==0) {
+            head=NULL;
+            if(input[2]=='<'){
+                ResetGame(input2);
+            }if(input[2]!='<'){
+                ResetGame("Deck");
             }
-            LD(input2);
-
-        }if(input[0] == 'S' && input[1] == 'D' && input[2]=='<'){
+            playingPhase=0;
+            shufflePhase=1;
+        }if(input[0] == 'S' && input[1] == 'D' && input[2]=='<'&&playingPhase==0 && shufflePhase==1){
             char input3[100];
 
             for (int i = 0; i < 100; ++i) {
@@ -621,27 +620,26 @@ int main(){
             SD(input3);
             bracketPrint();
 
-        }if (strcmp(input,"SD")==0 && input[2]!='<'){
+        }if (strcmp(input,"SD")==0 && input[2]!='<' && playingPhase==0 && shufflePhase==1){
             SD("cards.txt");
             bracketPrint();
 
-        }if(strcmp(input,"SW")==0){
+        }if(strcmp(input,"SW")==0 && shufflePhase==1 && playingPhase==0){
             SW();
-        }if(strcmp(input,"SI")==0){
+        }if(strcmp(input,"SI")==0 && shufflePhase==1 && playingPhase==0){
             twoSplit();
             bracketPrint();
-        }if(input[7]=='C' || input[7]=='F'){
+        }if(input[7]=='C' && playingPhase==1|| input[7]=='F' && playingPhase == 1){
             moveCard(input);
             print();
-        }if(strcmp(input,"SR")==0){
+        }if(strcmp(input,"SR")==0 && playingPhase==0 && shufflePhase==1){
             Shuffle();
-        }if(input[0]=='F'){
+        }if(input[0]=='F' && playingPhase==1 && shufflePhase==0){
             moveFromFoundation(input);
             print();
         }//hvis input[1] == F så kør foundation metode.
     }
-
-
+            
         //tømmer command igen.
         for (int i = 0; i<10 ; i++){
             lastCommand[i] = ' ';
