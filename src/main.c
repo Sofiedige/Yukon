@@ -485,8 +485,8 @@ void StartScreen() {
 
 
 
-void ResetGame(char input2[]){
-    LD(input2);
+void ResetGame(){
+    SD("ResetFile");
 }
 
 void twoSplit () {
@@ -624,12 +624,7 @@ int main(){
             LD("Deck");
 
         }if (strcmp(input, "Q") == 0 && playingPhase==1&&shufflePhase==0) {
-            head=NULL;
-            if(input[2]=='<'){
-                ResetGame(input2);
-            }if(input[2]!='<'){
-                ResetGame("Deck");
-            }
+            ResetGame();
             playingPhase=0;
             shufflePhase=1;
         }if(input[0] == 'S' && input[1] == 'D' && input[2]=='<'&&playingPhase==0 && shufflePhase==1){
