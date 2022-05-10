@@ -652,17 +652,18 @@ int main(){
         }else if(strcmp(input,"SI")==0 && startupPhase == 1 && playingPhase == 0){
             twoSplit();
             bracketPrint();
-        }else if(input[7]=='C' && playingPhase==1|| input[7]=='F' && playingPhase == 1){
+        }else if(input[0]=='F' && playingPhase==1 && startupPhase == 0){
+        printf("hell");
+        moveFromFoundation(input);
+        print();
+        }else if(input[0]=='C' && playingPhase==1 || input[7]=='F' && playingPhase == 1){
             moveCard(input);
             print();
             if(isWinner()){
                 break;
             }
-        }else if(strcmp(input,"SR")==0 && playingPhase==0 && startupPhase == 1){
+        }else if(strcmp(input,"SR")==0 && playingPhase==0 && startupPhase == 1) {
             Shuffle();
-        }else if(input[0]=='F' && playingPhase==1 && startupPhase == 0){
-            moveFromFoundation(input);
-            print();
         }else{
             sprintf(message,"Wrong input");
             if(head == NULL){
