@@ -462,19 +462,19 @@ void StartScreen() {
         count++;
 
             if (foundation == 0) {
-                printf("\t\t\t\t\t\t\t[] F1");
+                printf("\t\t\t\t[] F1");
                 printf("\n\n");
             }
             if (foundation == 2) {
-                printf("\t\t\t\t\t\t\t[] F2");
+                printf("\t\t\t\t[] F2");
                 printf("\n\n");
             }
             if (foundation == 4) {
-                printf("\t\t\t\t\t\t\t[] F3");
+                printf("\t\t\t\t[] F3");
                 printf("\n\n");
             }
             if (foundation == 6) {
-                printf("\t\t\t\t\t\t\t[] F4");
+                printf("\t\t\t\t[] F4");
                 printf("\n\n");
             }
 
