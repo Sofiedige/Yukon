@@ -21,7 +21,7 @@ node* arr[7];
 struct node* head = NULL;
 struct node* prevNode = NULL;
 char tempDeck[104];
-char message[15];
+char message[25];
 char lastCommand[100];
 node* f[4];
 
@@ -54,6 +54,15 @@ struct node *addCard(char rank, char suit){
 
     return newNode;
 }
+int isWinner(){
+    int win = 1;
+    for(int i = 0; i < 4; i++){
+        if(f[i]->rank != 'K'){
+            win = 0;
+        }
+    }
+    return win;
+}
 
 void SD(char file[]){
     FILE *out_file = fopen(file, "w"); // write only
@@ -67,6 +76,7 @@ void SD(char file[]){
         fprintf(out_file, "%c%c\n", current->rank,current->suit); // write to file
         current = current->next;
     }
+    sprintf(message,"OK");
 }
 
 int file_exists(const char *filename)
@@ -147,6 +157,7 @@ void dealCards() {
             }
         }
     }
+    sprintf(message,"OK");
 }
 
 
@@ -196,7 +207,7 @@ int isValid(node* bigger, node* smaller){
 void placeInFoundation(int fNo, int column, node* move, node* columnTail){
     node* foundation = f[fNo-1];
     if(foundation == NULL){
-        //error message
+        sprintf(message,"Error");
     }
 
     if(isValid(move,foundation) == 2){
@@ -212,8 +223,12 @@ void placeInFoundation(int fNo, int column, node* move, node* columnTail){
 
         move->prev = foundation;
         f[fNo-1] = move;
+        sprintf(message,"OK");
+    }else{
+        sprintf(message,"Card can't be put here");
     }
 }
+
 void moveFromFoundation(char input[]){
     char *fNumber = &input[1];
     int fNo = strtol(fNumber, NULL, 10);;
@@ -238,6 +253,8 @@ void moveFromFoundation(char input[]){
             fCard->prev = destCard;
             destCard->nextInC = fCard;
         }
+    }else{
+        sprintf(message,"Card can't be put here");
     }
 }
 
@@ -252,6 +269,7 @@ void moveCard(char input[]) {
 
     column = strtol(col, NULL, 10);
     node* current = arr[column - 1];
+    sprintf(message,"OK");
 
     //finder kort som skal rykkes
     while (current != NULL) {
@@ -265,7 +283,7 @@ void moveCard(char input[]) {
     }
     //hvis kortet ikke blev fundet, kommer der error besked.
     if (moveCard == NULL) {
-        //print error message.
+        sprintf(message,"Wrong input");
     }
     else {
         if (input[7] == 'F') {
@@ -299,10 +317,13 @@ void moveCard(char input[]) {
                     moveCard->prev = destCard;
                     destCard->nextInC = moveCard;
                 }
-
-                //}
-                //else { //print dette kort ikke kan rykkes
             }
+            else{
+                sprintf(message,"Card can't be put here");
+            }
+        }
+        if (isWinner() == 1){
+            sprintf(message,"You have won!");
         }
     }
 }
@@ -365,26 +386,6 @@ char print(){
     inputPrint();
 }
 
-
-void SWtest() {
-    int count = 0;
-    node *current_node;
-    for (int i = 0; i < 7; i++) {
-        current_node = arr[i];
-
-        while (current_node != NULL) {
-            count++;
-            if (count > 7) {
-                printf("\n%c%c ", current_node->suit, current_node->rank);
-                current_node = current_node->nextInC;
-                count = 1;
-            } else {
-                printf("%c%c ", current_node->suit, current_node->rank);
-                current_node = current_node->nextInC;
-            }
-        }
-    }
-}
 void SW() {
     printf(" C1  C2  C3  C4  C5  C6  C7\n\n");
 
@@ -415,6 +416,7 @@ void SW() {
         }
     }
     printf("\n");
+    sprintf(message,"OK");
     inputPrint();
 }
 
@@ -451,6 +453,7 @@ void bracketPrint(){
 }
 void LD(char file[]){
     createTempDeck(file);
+    sprintf(message,"OK");
     bracketPrint();
 }
 
@@ -546,6 +549,7 @@ void twoSplit () {
             }
         }
     }
+    sprintf(message,"OK");
 }
 int GetRandom(int lower, int upper){
         int num = (rand() %(upper - lower + 1)) + lower;
@@ -583,16 +587,15 @@ void Shuffle(){
         shuffledCur=shuffledHead;
     }
     head=shuffledHead;
+    sprintf(message,"OK");
 }
-
-
 
 int main(){
     srand(time(0));
     StartScreen();
     char input[100];
     int playingPhase = 0;
-    int shufflePhase = 1;
+    int startupPhase = 1;
 
 
     while(1) {
@@ -606,12 +609,12 @@ int main(){
             QQ();
         }
 
-        if (strcmp(input, "P") == 0 && playingPhase==0&&shufflePhase==1) {
+        else if (strcmp(input, "P") == 0 && playingPhase==0 && startupPhase == 1) {
             dealCards();
             print();
             playingPhase = 1;
-            shufflePhase = 0;
-        }if(input[0] == 'L' && input[1] == 'D' && input[2]=='<' && playingPhase == 0 && shufflePhase == 1){
+            startupPhase = 0;
+        }else if(input[0] == 'L' && input[1] == 'D' && input[2]=='<' && playingPhase == 0 && startupPhase == 1){
             for (int i = 0; i < 100; ++i) {
                 if(input[i+3]=='>'){
                     input2[i]='\0';
@@ -620,14 +623,14 @@ int main(){
                 input2[i]=input[i+3];
             }
             LD(input2);
-        }if(strcmp(input,"LD")==0&& input[2]!='<' && playingPhase == 0 && shufflePhase==1){
+        }else if(strcmp(input,"LD")==0 && input[2]!='<' && playingPhase == 0 && startupPhase == 1){
             LD("Deck");
 
-        }if (strcmp(input, "Q") == 0 && playingPhase==1&&shufflePhase==0) {
+        }else if (strcmp(input, "Q") == 0 && playingPhase==1 && startupPhase == 0) {
             ResetGame();
             playingPhase=0;
-            shufflePhase=1;
-        }if(input[0] == 'S' && input[1] == 'D' && input[2]=='<'&&playingPhase==0 && shufflePhase==1){
+            startupPhase=1;
+        }else if(input[0] == 'S' && input[1] == 'D' && input[2]=='<' &&playingPhase==0 && startupPhase == 1){
             char input3[100];
 
             for (int i = 0; i < 100; ++i) {
@@ -640,24 +643,38 @@ int main(){
             SD(input3);
             bracketPrint();
 
-        }if (strcmp(input,"SD")==0 && input[2]!='<' && playingPhase==0 && shufflePhase==1){
+        }else if (strcmp(input,"SD")==0 && input[2]!='<' && playingPhase==0 && startupPhase == 1){
             SD("cards.txt");
             bracketPrint();
 
-        }if(strcmp(input,"SW")==0 && shufflePhase==1 && playingPhase==0){
+        }else if(strcmp(input,"SW")==0 && startupPhase == 1 && playingPhase == 0){
             SW();
-        }if(strcmp(input,"SI")==0 && shufflePhase==1 && playingPhase==0){
+        }else if(strcmp(input,"SI")==0 && startupPhase == 1 && playingPhase == 0){
             twoSplit();
             bracketPrint();
-        }if(input[7]=='C' && playingPhase==1|| input[7]=='F' && playingPhase == 1){
+        }else if(input[7]=='C' && playingPhase==1|| input[7]=='F' && playingPhase == 1){
             moveCard(input);
             print();
-        }if(strcmp(input,"SR")==0 && playingPhase==0 && shufflePhase==1){
+            if(isWinner()){
+                break;
+            }
+        }else if(strcmp(input,"SR")==0 && playingPhase==0 && startupPhase == 1){
             Shuffle();
-        }if(input[0]=='F' && playingPhase==1 && shufflePhase==0){
+        }else if(input[0]=='F' && playingPhase==1 && startupPhase == 0){
             moveFromFoundation(input);
             print();
-        }//hvis input[1] == F så kør foundation metode.
+        }else{
+            sprintf(message,"Wrong input");
+            if(head == NULL){
+                StartScreen();
+            }
+            else if(playingPhase==1){
+                print();
+            }
+            else if(startupPhase==1){
+                bracketPrint();
+            }
+        }
     }
             
         //tømmer command igen.
